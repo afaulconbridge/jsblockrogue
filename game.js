@@ -32,7 +32,7 @@ var Game = {
      
         var digCallback = function(x, y, value) {
             var key = x+","+y;
-            
+            //value is 1 or zero depending if its a wall or not
             if (value) {
                 this.map[key] = "#";
             } else {
@@ -43,7 +43,7 @@ var Game = {
         
         
         var dugmap = digger.create(digCallback.bind(this));
-        /*
+        
         //at this point we have some rooms and some corridors
         //go through everything and put it in the map
         for (var y = 0 ; y  < ROT.DEFAULT_HEIGHT; y++) {
@@ -63,7 +63,7 @@ var Game = {
             //access doors as private variables
             for (var j = 0; j < room._doors.length; j++) {
                 var door = room._doors[j];
-                alert("Door "+door);
+                console.log("Door "+door);
                 this.map[door] = '+';
             }
         }
@@ -81,7 +81,7 @@ var Game = {
                 }
             }    
         }
-        */
+        
         this._createPlayer(freeCells);
     },
     
