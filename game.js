@@ -31,16 +31,19 @@ var Game = {
         var freeCells = [];
      
         var digCallback = function(x, y, value) {
-            if (value) { return; } //do not store walls
-     
             var key = x+","+y;
-            //this.map[key] = "#";
-            freeCells.push(key);
+            
+            if (value) {
+                this.map[key] = "#";
+            } else {
+                this.map[key] = ".";
+                freeCells.push(key);
+            }
         };
         
         
         var dugmap = digger.create(digCallback.bind(this));
-        
+        /*
         //at this point we have some rooms and some corridors
         //go through everything and put it in the map
         for (var y = 0 ; y  < ROT.DEFAULT_HEIGHT; y++) {
@@ -78,7 +81,7 @@ var Game = {
                 }
             }    
         }
-        
+        */
         this._createPlayer(freeCells);
     },
     
