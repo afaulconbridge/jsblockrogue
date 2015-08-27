@@ -44,7 +44,7 @@ var Game = {
                 
         var dugmap = digger.create(digCallback.bind(this));
         
-        this._createPlaer(freeCells);
+        this._createPlayer(freeCells);
     },
     
     _createPlayer: function(freeCells) {
@@ -61,7 +61,7 @@ var Game = {
             var parts = key.split(",");
             var x = parseInt(parts[0]);
             var y = parseInt(parts[1]);
-            this.display.draw(x, y, this.map[key], "#ff0");
+            this.display.draw(x, y, this.map[key], "#fff");
         }
         this.display.draw(this.player._x, this.player._y, "@", "#ff0");
     }
@@ -90,6 +90,7 @@ Player.prototype.handleEvent = function(e) {
     keyMap[ROT.VK_END] = 5;
     keyMap[ROT.VK_LEFT] = 6;
     keyMap[ROT.VK_HOME] = 7;
+    
     keyMap[ROT.VK_NUMPAD8] = 0;
     keyMap[ROT.VK_NUMPAD9] = 1;
     keyMap[ROT.VK_NUMPAD6] = 2;
