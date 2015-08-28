@@ -7,8 +7,8 @@ var Game = {
     map: {},
  
     init: function() {
-        this.display = new ROT.Display({spacing:1.1});
-        document.body.appendChild(this.display.getContainer());
+        this.display = new ROT.Display({spacing:1, width:80, height:40, forceSquareRatio:true});
+        document.getElementById("rotDiv").appendChild(this.display.getContainer());
         
         this._generateMap();
 
@@ -27,7 +27,7 @@ var Game = {
             roomheight:[3,9],
         };
         
-        var digger = new ROT.Map.Digger(ROT.DEFAULT_WIDTH, ROT.DEFAULT_HEIGHT, config);
+        var digger = new ROT.Map.Digger(80,40, config);
         var freeCells = [];
      
         var digCallback = function(x, y, value) {
