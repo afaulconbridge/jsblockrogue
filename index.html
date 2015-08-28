@@ -2,9 +2,32 @@
 <html>
     <head>
         <title>JsBlockRogue</title>
-        <script src="https://ondras.github.io/rot.js/rot.js"></script>
+        <script src="rot.js"></script>
+        
+        <script src="acorn_interpreter.js"></script>
+        
+        <script src="blockly_compressed.js"></script>
+        <script src="blocks_compressed.js"></script>
+        <script src="msg/js/en.js"></script>
+        
         <script src="game.js"></script>
+        
+        <xml id="toolbox" style="display: none">
+          <block type="controls_if"></block>
+          <block type="controls_repeat_ext"></block>
+          <block type="logic_compare"></block>
+          <block type="math_number"></block>
+          <block type="math_arithmetic"></block>
+          <block type="text"></block>
+          <block type="text_print"></block>
+        </xml>
     </head>
     <body onload="Game.init()">
+        <div id="rotDiv"></div>
+        <div id="blocklyDiv" style="width: 1200px; height: 600px;"></div>
+        
+        <script>
+          var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+        </script>
     </body>
 </html>
