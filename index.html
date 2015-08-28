@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        
         <title>JsBlockRogue</title>
         <script src="rot.js"></script>
         
@@ -8,26 +10,42 @@
         
         <script src="blockly_compressed.js"></script>
         <script src="blocks_compressed.js"></script>
+        <script src="javascript_compressed.js"></script>
         <script src="msg/js/en.js"></script>
         
         <script src="game.js"></script>
         
         <xml id="toolbox" style="display: none">
-          <block type="controls_if"></block>
-          <block type="controls_repeat_ext"></block>
-          <block type="logic_compare"></block>
-          <block type="math_number"></block>
-          <block type="math_arithmetic"></block>
-          <block type="text"></block>
-          <block type="text_print"></block>
+            <category name="Logic">
+                <block type="controls_if"></block>
+                <block type="logic_compare"></block>
+                <block type="logic_operation"></block>
+                <block type="logic_negate"></block>
+                <block type="logic_boolean"></block>
+            </category>
+            <category name="Loops">
+                <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <block type="math_number">
+                    <field name="NUM">10</field>
+                    </block>
+                </value>
+                </block>
+                <block type="controls_whileUntil"></block>
+            </category>
+            <category name="Math">
+                <block type="math_number"></block>
+                <block type="math_arithmetic"></block>
+                <block type="math_single"></block>
+            </category>
+            <category name="Variables" custom="VARIABLE"></category>
+            <category name="Functions" custom="PROCEDURE"></category>
         </xml>
+  
     </head>
     <body onload="Game.init()">
-        <div id="rotDiv"></div>
+        <div id="rotDiv" style="width: 1200px; height: 600px;"></div>
+        <button onclick="Game.start()">Run!</button>
         <div id="blocklyDiv" style="width: 1200px; height: 600px;"></div>
-        
-        <script>
-          var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
-        </script>
     </body>
 </html>

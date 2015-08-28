@@ -5,17 +5,87 @@ var Game = {
     player: null,
     engine: null,
     map: {},
+    
+    blocklyWorkspace: null,
+    blocklyInterpreter: null,
+    blocklyHighlightPause: false,
  
     init: function() {
         this.display = new ROT.Display({spacing:1, width:80, height:40, forceSquareRatio:true});
         document.getElementById("rotDiv").appendChild(this.display.getContainer());
         
+        this.blocklyWorkspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+        Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+        Blockly.JavaScript.addReservedWords('highlightBlock');
+        
+    },
+    
+    start: function() {
         this._generateMap();
+        
+        // Generate JavaScript code and parse it.
+        var code = Blockly.JavaScript.workspaceToCode(this.blocklyWorkspace);
+        this.blocklyInterpreter = new Interpreter(code, function(interpreter, scope) {
+      // Add an API function for the alert() block.
+      var wrapper = function(text) {
+        text = text ? text.toString() : '';
+        return interpreter.createPrimitive(alert(text));
+      };
+      interpreter.setProperty(scope, 'alert',
+          interpreter.createNativeFunction(wrapper));
 
+      // Add an API function for the prompt() block.
+      wrapper = function(text) {
+        text = text ? text.toString() : '';
+        return interpreter.createPrimitive(prompt(text));
+      };
+      interpreter.setProperty(scope, 'prompt',
+          interpreter.createNativeFunction(wrapper));
+          
+      // Add an API function for highlighting blocks.
+      var wrapper = function(id) {
+        id = id ? id.toString() : '';
+        return interpreter.createPrimitive(this.blocklyWorkspace.highlightBlock(id));
+      };
+      interpreter.setProperty(scope, 'highlightBlock',
+          interpreter.createNativeFunction(wrapper));
+    });
+
+        this.blocklyHighlightPause = false;
+        this.blocklyWorkspace.traceOn(true);
+        this.blocklyWorkspace.highlightBlock(null);
+
+        //start the ROT scheduler for turns
         var scheduler = new ROT.Scheduler.Simple();
         scheduler.add(this.player, true);
         this.engine = new ROT.Engine(scheduler);
         this.engine.start();
+    },
+
+
+    highlightBlock: function(id) {
+      this.blocklyWorkspace.highlightBlock(id);
+      this.blocklyHighlightPause = true;
+    },
+
+
+    stepCode: function() {
+      try {
+        var ok = this.blocklyInterpreter.step();
+      } finally {
+        if (!ok) {
+          // Program complete, no more code to execute.
+          return;
+        }
+      }
+      if (this.blocklyHighlightPause) {
+        // A block has been highlighted.  Pause execution here.
+        this.blocklyHighlightPause = false;
+        setTimeout(stepCode.bind(this), 1000);
+      } else {
+        // Keep executing until a highlight statement is reached.
+        this.stepCode();
+      }
     },
     
     _generateMap: function() {
@@ -74,8 +144,12 @@ var Player = function(x, y) {
 
 Player.prototype.act = function() {
     Game._drawWholeMap();
+    
     Game.engine.lock();
-    window.addEventListener("keydown", this);
+    //window.addEventListener("keydown", this);
+    
+    Game.stepCode();
+    
 };
     
 Player.prototype.handleEvent = function(e) {
