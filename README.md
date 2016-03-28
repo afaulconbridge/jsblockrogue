@@ -1,6 +1,8 @@
 # jsblockrogue
 A roguelike written in javascript using blockly programming
 
+https://afaulconbridge.github.io/jsblockrogue/
+
 This is a pet project to practice my javascript.
 
 The concept is a simple roguelike game, but where the player characters behaviours are programmed instead of manually controlled. 
